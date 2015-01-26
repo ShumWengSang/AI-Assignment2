@@ -10,12 +10,10 @@ MessageBoard::~MessageBoard()
 
 void MessageBoard::sendMessage(string content, GameObject::GAMEOBJECT_TYPE sender, GameObject::GAMEOBJECT_TYPE receiver, int piority )
 {
-	//
 	Message newMessage(content, sender, receiver, piority);
 
 	DebugMessage.NewMessage(newMessage);
 	themessages.push_back(newMessage);
-
 }
 
 string MessageBoard::getMessage(GameObject::GAMEOBJECT_TYPE recv)

@@ -22,6 +22,12 @@ typedef struct												// Create A Structure
 	GLuint	frameNumbers;									// Number of frames in the texture
 } TextureImage;												// Structure Name
 
+struct WayPoint
+{
+	Vector3 thePoint;
+	WayPoint * nextPoint;
+};
+
 class AI
 {
 public:
@@ -62,7 +68,8 @@ private:
 	void FireBullet(GameObject* go);
 	GameObject* money;
 	GameObject* exit;
-	Vector3 WayPoints[5];
+	//Vector3 WayPoints[5];
+	WayPoint thePoints[5];
 
 	std::vector<GameObject *> m_goList;
 	std::vector<GameObject *> robber_list;

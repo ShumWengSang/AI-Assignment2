@@ -85,6 +85,52 @@ void AI::DrawObject(GameObject *go)
 			glEnd();
 		glPopMatrix();
 		break;
+	case GameObject::GO_LOOKOUT:
+		glPushMatrix();
+			if (go->CurrentState == GameObject::STATES::RUNNING_AWAY)
+				glColor3f(1, 0, 1);
+			else
+				glColor3f(0.5, 0, 0);
+			glTranslatef(go->pos.x, go->pos.y, go->pos.z);
+			glScalef(go->scale.x, go->scale.y, go->scale.z);
+
+			glutSolidSphere(15, 20, 10);
+
+			glutSolidSphere(1, 10, 10);
+
+			glTranslatef(0, 3, 0); //Bar Outline
+			glColor3f(1, 0, 0);
+			glBegin(GL_LINES);
+			glVertex3f(-3, -1, 0);	glVertex3f(3, -1, 0);
+			glVertex3f(3, 1, 0);	glVertex3f(-3, 1, 0);
+			glVertex3f(3, -1, 0);	glVertex3f(3, 1, 0);
+			glVertex3f(-3, -1, 0);	glVertex3f(-3, 1, 0);
+			glEnd();
+
+			glBegin(GL_QUADS);
+			glVertex3f(-3, 1, 0);
+			glVertex3f(-3, -1, 0);
+			glVertex3f(-3 + 0.06 * go->health, -1, 0);
+			glVertex3f(-3 + 0.06 * go->health, 1, 0);
+			glEnd();
+
+			glTranslatef(0, -6, 0); //Bar Outline
+			glColor3f(0, 1, 0);
+			glBegin(GL_LINES);
+			glVertex3f(-3, -1, 0);	glVertex3f(3, -1, 0);
+			glVertex3f(3, 1, 0);	glVertex3f(-3, 1, 0);
+			glVertex3f(3, -1, 0);	glVertex3f(3, 1, 0);
+			glVertex3f(-3, -1, 0);	glVertex3f(-3, 1, 0);
+			glEnd();
+
+			glBegin(GL_QUADS);
+			glVertex3f(-3, 1, 0);
+			glVertex3f(-3, -1, 0);
+			glVertex3f(-3 + 0.06 * go->money, -1, 0);
+			glVertex3f(-3 + 0.06 * go->money, 1, 0);
+			glEnd();
+		glPopMatrix();
+		break;
 	case GameObject::GO_POLICE:
 		glPushMatrix();
 			glColor3f(0, 0, 1);

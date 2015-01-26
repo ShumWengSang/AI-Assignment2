@@ -85,9 +85,11 @@
     <ClCompile Include="Backend.cpp" />
     <ClCompile Include="DrawFunctions.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="MessageBoard.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AI.h" />
+    <ClInclude Include="MessageBoard.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

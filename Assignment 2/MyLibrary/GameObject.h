@@ -9,7 +9,7 @@ struct GameObject
 		GO_POLICE,
 		GO_CHIEF,
 		GO_ROBBER,
-		GO_RUNAWAY,
+		GO_LOOKOUT,
 		GO_BULLET,
 		GO_WAYPOINTS,
 		GO_WALL,

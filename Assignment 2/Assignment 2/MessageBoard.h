@@ -1,13 +1,16 @@
+#pragma once
 #include <iostream>
 #include <string>
 #include <vector>
 #include "GameObject.h"
+#include "freeglut.h"
 #include <algorithm>
 using namespace std;
 
 #define HELP "Help";
 #define SHOOT "Shoot";
 #define TAKECOVER "Take Cover";
+#define REPLACE "Replace"; //For when the chief dies and another takes over
 
 struct Message
 {
@@ -51,7 +54,6 @@ public:
 	void RenderMessageBoard()
 	{
 	}
-
 };
 
 class MessageBoard {
