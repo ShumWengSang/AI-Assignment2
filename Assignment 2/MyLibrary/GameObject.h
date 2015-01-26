@@ -56,4 +56,6 @@ struct GameObject
 
 	GameObject(GAMEOBJECT_TYPE typeValue = GO_NONE);
 	~GameObject();
+
+
 };

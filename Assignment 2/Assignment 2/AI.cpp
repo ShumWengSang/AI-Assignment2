@@ -412,6 +412,7 @@ void AI::GlutIdle()
 									if (police_list[i]->active) {
 										police_mb.sendMessage("Chief down, I'm now the chief", go->type, GameObject::GAMEOBJECT_TYPE::GO_CHIEF, 1);
 										police_list[i]->type = GameObject::GO_CHIEF;
+										break;
 									}
 								}
 							}

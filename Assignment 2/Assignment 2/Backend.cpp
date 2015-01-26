@@ -5,6 +5,8 @@ AI::AI()
 	, m_speed(1)
 	, m_worldSizeY(100)
 	, m_worldSizeX(m_worldSizeY)
+	, police_mb(this)
+	, robber_mb(this)
 {
 }
 
@@ -109,7 +111,7 @@ void AI::RenderStringOnScreen(float x, float y, const char* quote)
 
 	for (int i = 0; i < length; i++)
 	{
-		glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, quote[i]);
+		glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_10 , quote[i]);
 	}
 }
 

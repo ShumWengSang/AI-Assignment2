@@ -28,7 +28,8 @@ void AI::GlutDisplay()
 			}
 		}
 	}
-
+	police_mb.DebugMessage.RenderMessageBoard(3,78,60,20);
+	robber_mb.DebugMessage.RenderMessageBoard(67,78,60,20);
 	glutSwapBuffers();
 	glutPostRedisplay();
 
