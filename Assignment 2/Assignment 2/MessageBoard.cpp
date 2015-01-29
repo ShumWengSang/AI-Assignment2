@@ -103,14 +103,41 @@ void ShowMessages::DrawLineCube(int x, int y, int width, int height)
 
 	if(Messages.size() >= 1)
 	{
-		if(Messages.back().message.size() > 10)
+		static bool Resized = false;
+		static int Size = Messages.size();
+		if(Messages.back().message.size() > 10 && Resized == false)
 		{
-			static bool done = true;
+			Size = Messages.size();
 			static std::string theString = Messages.back().message;
 
 			Messages.back().message.insert(10,"\n");
+			Resized = true;
 		}
-		aiHandler->RenderStringOnScreen(x + width -  width * 3 / 4 - 10 , y + height - height * 2 / 3 + 2, Messages.back().message.c_str());
+		if (Size != Messages.size())
+		{
+			Resized = false;
+		}
+		if (Messages.back().message.size() > 10)
+		{
+			std::string theMessage = Messages.back().message;
+			istringstream iss(theMessage);
+
+			vector<string> tokens{ istream_iterator<string>{iss},
+			istream_iterator<string>{} };
+			std::string FirstPart = tokens[0] + " " + tokens[1] + " " +  tokens[2];
+			std::string SecondPart;
+			for (int i = 3; i < tokens.size(); i++)
+			{
+				SecondPart += tokens[i] + " ";
+			}
+			aiHandler->RenderStringOnScreen(x + width - width * 3 / 4 - 10, y + height - height * 2 / 3 + 4,  FirstPart.c_str());
+			aiHandler->RenderStringOnScreen(x + width - width * 3 / 4 - 10, y + height - height * 2 / 3 + 2, SecondPart.c_str());
+		}
+		else
+		{
+			aiHandler->RenderStringOnScreen(x + width -  width * 3 / 4 - 10 , y + height - height * 2 / 3 + 2, Messages.back().message.c_str());
+		}
+
 		aiHandler->RenderStringOnScreen(x + width -  width * 2 / 4 - 10 , y + height - height * 2 / 3 + 2, Messages.back().StringRecv.c_str());
 		aiHandler->RenderStringOnScreen(x + width -  width * 1 / 4 - 10 , y + height - height * 2 / 3 + 2, Messages.back().StringSender.c_str());
 	}

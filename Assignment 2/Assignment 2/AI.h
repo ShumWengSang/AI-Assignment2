@@ -84,7 +84,8 @@ private:
 	void DrawSquare(int length);
 
 	bool Alarm;
-
+	void AlarmRing();
+	bool firstChiefDead;
 	void GotoLocation(Vector3 theNewPos, GameObject * go, float speed);
 	bool ReachedLocation(Vector3 thePosReached, GameObject * go);
 

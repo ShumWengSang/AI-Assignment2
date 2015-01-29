@@ -5,6 +5,7 @@
 #include "GameObject.h"
 #include "freeglut.h"
 #include <algorithm>
+#include <sstream>
 
 extern class AI;
 

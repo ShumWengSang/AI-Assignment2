@@ -10,6 +10,10 @@ void AI::GlutDisplay()
 
 	glColor3f(1, 1, 1);
 
+	glPushMatrix();
+
+	glTranslatef(0, -10, 0);
+
 	DrawLineCube(25, 25, 80, 50);
 
 	for (std::vector<GameObject *>::iterator it = m_goList.begin(); it != m_goList.end(); ++it)
@@ -28,6 +32,9 @@ void AI::GlutDisplay()
 			}
 		}
 	}
+
+	glPopMatrix();
+
 	police_mb.DebugMessage.RenderMessageBoard(3,78,60,20);
 	robber_mb.DebugMessage.RenderMessageBoard(67,78,60,20);
 	glutSwapBuffers();
