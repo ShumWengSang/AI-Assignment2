@@ -16,6 +16,8 @@ void AI::GlutDisplay()
 
 	DrawLineCube(25, 25, 80, 50);
 
+	DrawBackground(6, 10);
+
 	for (std::vector<GameObject *>::iterator it = m_goList.begin(); it != m_goList.end(); ++it)
 	{
 		GameObject *go = (GameObject *)*it;
@@ -48,6 +50,8 @@ void AI::GlutDisplay()
 
 void AI::DrawObject(GameObject *go)
 {
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	switch (go->type)
 	{
 	case GameObject::GO_ROBBER:
@@ -55,11 +59,12 @@ void AI::DrawObject(GameObject *go)
 			if (go->CurrentState == GameObject::STATES::RUNNING_AWAY)
 				glColor3f(1, 0, 1);
 			else
-				glColor3f(1, 0, 0);
+				glColor3f(1, 1, 1);
 			glTranslatef(go->pos.x, go->pos.y, go->pos.z);
 			glScalef(go->scale.x, go->scale.y, go->scale.z);
-			glutSolidSphere(1, 10, 10);
-
+			glBindTexture(GL_TEXTURE_2D, textures[GameObject::GAMEOBJECT_TYPE::GO_ROBBER].texID);
+			DrawSquare(4);
+			glDisable(GL_BLEND);
 			glTranslatef(0, 3, 0); //Bar Outline
 			glColor3f(1, 0, 0);
 			glBegin(GL_LINES);
@@ -98,14 +103,16 @@ void AI::DrawObject(GameObject *go)
 			if (go->CurrentState == GameObject::STATES::RUNNING_AWAY)
 				glColor3f(1, 0, 1);
 			else
-				glColor3f(0.5, 0, 0);
+				glColor3f(1, 1, 1);
 			glTranslatef(go->pos.x, go->pos.y, go->pos.z);
 			glScalef(go->scale.x, go->scale.y, go->scale.z);
 
+
+
+			glBindTexture(GL_TEXTURE_2D, textures[GameObject::GAMEOBJECT_TYPE::GO_ROBBER].texID);
+			DrawSquare(4);
+			glDisable(GL_BLEND);
 			glutSolidSphere(15, 20, 10);
-
-			glutSolidSphere(1, 10, 10);
-
 			glTranslatef(0, 3, 0); //Bar Outline
 			glColor3f(1, 0, 0);
 			glBegin(GL_LINES);
@@ -141,11 +148,12 @@ void AI::DrawObject(GameObject *go)
 		break;
 	case GameObject::GO_POLICE:
 		glPushMatrix();
-			glColor3f(0, 0, 1);
+			glColor3f(1, 1, 1);
 			glTranslatef(go->pos.x, go->pos.y, go->pos.z);
 			glScalef(go->scale.x, go->scale.y, go->scale.z);
-			glutSolidSphere(1, 10, 10);
-
+			glBindTexture(GL_TEXTURE_2D, textures[GameObject::GAMEOBJECT_TYPE::GO_POLICE].texID);
+			DrawSquare(4);
+			glDisable(GL_BLEND);
 			glTranslatef(0, 3, 0); //Bar Outline
 			glColor3f(1, 0, 0);
 			glBegin(GL_LINES);
@@ -169,8 +177,9 @@ void AI::DrawObject(GameObject *go)
 		glColor3f(0, 1, 1);
 		glTranslatef(go->pos.x, go->pos.y, go->pos.z);
 		glScalef(go->scale.x, go->scale.y, go->scale.z);
-		glutSolidSphere(1, 10, 10);
-
+		glBindTexture(GL_TEXTURE_2D, textures[GameObject::GAMEOBJECT_TYPE::GO_POLICE].texID);
+		DrawSquare(4);
+		glDisable(GL_BLEND);
 		glTranslatef(0, 3, 0); //Bar Outline
 		glColor3f(1, 0, 0);
 		glBegin(GL_LINES);
@@ -190,7 +199,7 @@ void AI::DrawObject(GameObject *go)
 		break;
 	case GameObject::GO_BULLET:
 		glPushMatrix();
-			glColor3f(1, 1, 1);
+			glColor3f(1, 0, 0);
 			glTranslatef(go->pos.x, go->pos.y, go->pos.z);
 			glScalef(go->scale.x, go->scale.y, go->scale.z);
 			glutSolidSphere(0.2, 10, 10);
@@ -209,17 +218,29 @@ void AI::DrawObject(GameObject *go)
 		glColor3f(1, 1, 1);
 		glTranslatef(go->pos.x, go->pos.y, go->pos.z);
 		glScalef(go->scale.x, go->scale.y, go->scale.z);
-		glutSolidCube(2);
+		glBindTexture(GL_TEXTURE_2D, textures[GameObject::GAMEOBJECT_TYPE::GO_EXIT].texID);
+		DrawSquare(4);
 		glPopMatrix();
 		break;
 	case GameObject::GO_MONEY:
 		glPushMatrix();
-		glColor3f(0, 0.5, 0);
+		glColor3f(1, 1, 1);
 		glTranslatef(go->pos.x, go->pos.y, go->pos.z);
 		glScalef(go->scale.x, go->scale.y, go->scale.z);
-		//glBindTexture(GL_TEXTURE_2D, textures[GameObject::GAMEOBJECT_TYPE::GO_MONEY].texID);
+		glBindTexture(GL_TEXTURE_2D, textures[GameObject::GAMEOBJECT_TYPE::GO_MONEY].texID);
 		DrawSquare(10);
 		glPopMatrix();
 		break;
 	}
+	glDisable(GL_BLEND);
+}
+
+void AI::DrawSquare(int length)
+{
+	glBegin(GL_QUADS);
+	glTexCoord2f(0, 0);		glVertex2f(-length * 0.5, -length * 0.5);
+	glTexCoord2f(1, 0);		glVertex2f(length * 0.5, -length * 0.5);
+	glTexCoord2f(1, 1);		glVertex2f(length * 0.5, length * 0.5);
+	glTexCoord2f(0, 1);		glVertex2f(-length * 0.5, length * 0.5);
+	glEnd();
 }

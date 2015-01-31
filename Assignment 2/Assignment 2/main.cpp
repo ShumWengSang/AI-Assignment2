@@ -43,6 +43,7 @@ int main(int argc, char **argv)
 	glutInitWindowPosition(100, 100);
 	glutCreateWindow("AI game");
 	glutReshapeFunc(onReshape);
+	glutFullScreen();
 	glutMouseFunc(onMouseClick);
 	glutMotionFunc(onMouseMove);
 	glutKeyboardFunc(onKeyboard);

@@ -82,7 +82,7 @@ private:
 	void DrawCubeTextured(int x, int y, int size);
 
 	void DrawSquare(int length);
-
+	void DrawBackground(int, int);
 	bool Alarm;
 	void AlarmRing();
 	bool firstChiefDead;

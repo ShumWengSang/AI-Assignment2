@@ -2,7 +2,11 @@
 
 void AI::Init()
 {
+	LoadTGA(&textures[GameObject::GAMEOBJECT_TYPE::GO_ROBBER], "images/robber.tga");
+	LoadTGA(&textures[GameObject::GAMEOBJECT_TYPE::GO_POLICE], "images/police.tga");
 	LoadTGA(&textures[GameObject::GAMEOBJECT_TYPE::GO_MONEY], "images/money.tga");
+	LoadTGA(&textures[GameObject::GAMEOBJECT_TYPE::GO_EXIT], "images/exit.tga");
+	LoadTGA(&textures[GameObject::GAMEOBJECT_TYPE::GO_WALL], "images/bg.tga");
 
 	srand(time(NULL));
 	GameObject * go;
@@ -178,21 +182,21 @@ void AI::GlutKeyboard(unsigned char key, int x, int y)
 		Alarm = true;
 		for (std::vector<GameObject *>::iterator iter = robber_list.begin(); iter != robber_list.end(); ++iter)
 		{
-			GameObject *go = (GameObject *) *iter;
+			GameObject *go = (GameObject *)*iter;
 			go->TargetShoot = police_list[rand() % police_list.size()];
-			
+
 			go->CurrentState = GameObject::STATES::SHOOTING;
 
 			//FireBullet(go);
 
 			//go->CurrentState = GameObject::STATES::RUNNING_AWAY;
-			
-			
+
+
 			/*int runaway = rand() % 2;
 			if (runaway)
-				go->CurrentState = GameObject::STATES::RUNNING_AWAY;
+			go->CurrentState = GameObject::STATES::RUNNING_AWAY;
 			else
-				go->CurrentState = GameObject::STATES::SHOOTING;*/
+			go->CurrentState = GameObject::STATES::SHOOTING;*/
 		}
 
 		for (std::vector<GameObject *>::iterator iter = police_list.begin(); iter != police_list.end(); ++iter)
@@ -203,7 +207,13 @@ void AI::GlutKeyboard(unsigned char key, int x, int y)
 				go->CurrentState = GameObject::STATES::SHOOTING;
 		}
 		break;
+	case 27:
+	{
+		_exit(0);
+		break;
 	}
+	}
+
 }
 
 void AI::GlutIdle()
@@ -470,27 +480,6 @@ void AI::GlutIdle()
 
 }
 
-void AI::DrawSquare(int length)
-{
-	glBegin(GL_QUADS);
-
-	glTexCoord2f(0, 0);		glVertex2f(-length * 0.5, -length * 0.5);
-	glTexCoord2f(1, 0);		glVertex2f(length * 0.5, -length * 0.5);
-	glTexCoord2f(1, 1);		glVertex2f(length * 0.5, length * 0.5);
-	glTexCoord2f(0, 1);		glVertex2f(-length * 0.5, length * 0.5);
-	//glTexCoord2f(0, 1);		glVertex2f(0, 0);
-	//glTexCoord2f(0, 0);		glVertex2f(0, 10);
-	//glTexCoord2f(1, 0);		glVertex2f(10, 10);
-	//glTexCoord2f(1, 1);		glVertex2f(10, 0);
-
-
-	//glutSolidCube(1);
-	glEnd();
-	//glutSolidCube(10);
-}
-
-
-
 void AI::DrawLineCube(int x, int y, int width, int height)
 {
 	glLineWidth(5);
@@ -502,8 +491,22 @@ void AI::DrawLineCube(int x, int y, int width, int height)
 		glVertex2f(x + width, y + height);
 		glVertex2f(x + width, y);
 		glVertex2f(x, y);
-		//glLineWidth(1);
 	}
 	glEnd();
 	glLineWidth(1);
+}
+
+void AI::DrawBackground(int x, int y)
+{
+	glPushMatrix();
+	glColor3f(1, 1, 1);
+	glTranslatef(x, y, 0);
+	glBindTexture(GL_TEXTURE_2D, textures[GameObject::GAMEOBJECT_TYPE::GO_WALL].texID);
+	glBegin(GL_QUADS);
+	glTexCoord2f(0, 0);		glVertex2f(0, 0);
+	glTexCoord2f(1, 0);		glVertex2f(120, 0);
+	glTexCoord2f(1, 1);		glVertex2f(120, 78);
+	glTexCoord2f(0, 1);		glVertex2f(0, 78);
+	glEnd();
+	glPopMatrix();
 }
