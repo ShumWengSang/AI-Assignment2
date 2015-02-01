@@ -7,7 +7,8 @@ GameObject::GameObject(GAMEOBJECT_TYPE typeValue)
 			color(1, 1, 1),
 			health(100),
 			money(0),
-			TargetShoot(NULL)
+			TargetShoot(NULL),
+			TargetLocked(false)
 {
 }
 

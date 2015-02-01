@@ -111,11 +111,11 @@ void AI::RenderStringOnScreen(float x, float y, const char* quote)
 
 	for (int i = 0; i < length; i++)
 	{
-		glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_10 , quote[i]);
+		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, quote[i]);
 	}
 }
 
-bool AI::LoadTGA(TextureImage *texture, char *filename)			// Loads A TGA File Into Memory
+bool AI::LoadTGA(TextureImage *texture, char *filename)		// Loads A TGA File Into Memory
 {
 	GLubyte		TGAheader[12] = { 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0 };	// Uncompressed TGA Header
 	GLubyte		TGAcompare[12];								// Used To Compare TGA Header

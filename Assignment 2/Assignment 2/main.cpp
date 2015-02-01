@@ -41,9 +41,9 @@ int main(int argc, char **argv)
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
 	glutInitWindowSize(800, 600);
 	glutInitWindowPosition(100, 100);
-	glutCreateWindow("AI game");
+	glutCreateWindow("AI Assignment 2");
 	glutReshapeFunc(onReshape);
-	glutFullScreen();
+	//glutFullScreen();
 	glutMouseFunc(onMouseClick);
 	glutMotionFunc(onMouseMove);
 	glutKeyboardFunc(onKeyboard);

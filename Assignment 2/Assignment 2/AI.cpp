@@ -35,42 +35,57 @@ void AI::Init()
 	Alarm = false;
 	firstChiefDead = false;
 
+	exit = FetchGO();
+	exit->type = GameObject::GO_EXIT;
+	exit->pos.Set(10, m_worldSizeY * 0.5f, 0);
+
 	money = FetchGO();
 	money->type = GameObject::GO_MONEY;
-	money->pos.Set(30, 30, 0);
+	money->pos.Set(rand() % 20 + 20, rand() % 31 + 30, 0);
 	money->scale.Set(1, 1, 1);
 
+	money2 = FetchGO();
+	money2->type = GameObject::GO_MONEY;
+	money2->pos.Set(rand() % 30 + 20, rand() % 31 + 30, 0);
+	money2->scale.Set(1, 1, 1);
 
 
 	go = FetchGO();
 	go->type = GameObject::GO_LOOKOUT;
-	go->pos.Set(80, 20, 0);
+	go->pos.Set(40, 15, 0);
 	go->CurrentState = GameObject::STATES::PATROLLING;
 
 	go = FetchGO();
 	go->type = GameObject::GO_ROBBER;
-	go->pos.Set(70, 40, 0);
+	go->pos.Set(rand() % 40 + 20, rand() % 30 + 20, 0);
 	go->CurrentState = GameObject::STATES::STEALING;
 
 	go = FetchGO();
 	go->type = GameObject::GO_ROBBER;
-	go->pos.Set(70, 60, 0);
+	go->pos.Set(rand() % 40 + 20, rand() % 30 + 30, 0);
 	go->CurrentState = GameObject::STATES::STEALING;
 	go = FetchGO();
 
 	go = FetchGO();
 	go->type = GameObject::GO_ROBBER;
-	go->pos.Set(70, 80, 0);
+	go->pos.Set(rand() % 40 + 20, rand() % 30 + 10);
 	go->CurrentState = GameObject::STATES::STEALING;
 	
+	go = FetchGO();
+	go->type = GameObject::GO_ROBBER;
+	go->pos.Set(rand() % 40 + 20, rand() % 30 + 40);
+	go->CurrentState = GameObject::STATES::STEALING;
 
+	go = FetchGO();
+	go->type = GameObject::GO_ROBBER;
+	go->pos.Set(rand() % 40 + 20, rand() % 30 + 50);
+	go->CurrentState = GameObject::STATES::STEALING;
 
 
 
 	go = FetchGO();
 	go->type = GameObject::GO_POLICE;
 	go->pos.Set(110, 70, 0);
-	//go->vel.Set(0, 15, 0);
 	go->CurrentState = GameObject::STATES::PATROLLING;
 	go->TargetLocked = false;
 
@@ -95,9 +110,12 @@ void AI::Init()
 	go->CurrentState = GameObject::STATES::PATROLLING;
 	go->TargetLocked = false;
 
-	exit = FetchGO();
-	exit->type = GameObject::GO_EXIT;
-	exit->pos.Set(10, m_worldSizeY * 0.5f, 0);
+	go = FetchGO();
+	go->type = GameObject::GO_POLICE;
+	go->pos.Set(90, 30, 0);
+	go->vel.Set(0, 15, 0);
+	go->CurrentState = GameObject::STATES::PATROLLING;
+	go->TargetLocked = false;
 
 	for (std::vector<GameObject *>::iterator iter2 = m_goList.begin(); iter2 != m_goList.end(); ++iter2)
 	{
@@ -114,6 +132,10 @@ void AI::Init()
 	police_list[0]->type = GameObject::GO_CHIEF;
 	robber_list[0]->type = GameObject::GO_LOOKOUT;
 	robber_list[0]->vel.Set(0, 15, 0);
+
+	robberCount = robber_list.size();
+	policeCount = police_list.size();
+
 	//cout << robber_list.size() << " " << police_list.size();
 
 	//go = FetchGO();
@@ -143,7 +165,8 @@ void AI::GotoLocation(Vector3 theNewPos, GameObject * go, float speed)
 
 bool AI::ReachedLocation(Vector3 thePosReached, GameObject * go)
 {
-	return 1 > (thePosReached - go->pos).Length();
+	if (go->type != GameObject::GAMEOBJECT_TYPE::GO_MONEY)
+		return 1 > (thePosReached - go->pos).Length();
 }
 
 void AI::AlarmRing() {
@@ -178,6 +201,10 @@ void AI::GlutKeyboard(unsigned char key, int x, int y)
 		}
 		break;
 
+	case 'm':
+		cout <<robberCount<< robber_mb.getMessage(GameObject::GAMEOBJECT_TYPE::GO_ROBBER);
+		break;
+
 	case ' ':
 		Alarm = true;
 		for (std::vector<GameObject *>::iterator iter = robber_list.begin(); iter != robber_list.end(); ++iter)
@@ -208,10 +235,37 @@ void AI::GlutKeyboard(unsigned char key, int x, int y)
 		}
 		break;
 	case 27:
-	{
 		_exit(0);
 		break;
-	}
+
+	case 'r':
+		///*
+		while (police_list.size() > 0)
+		{
+			//GameObject *go = police_list.back();
+			//delete go;
+			police_list.pop_back();
+		}
+		while (robber_list.size() > 0)
+		{
+			//GameObject *go = robber_list.back();
+			//delete go;
+			robber_list.pop_back();
+		}
+		while (m_goList.size() > 0)
+		{
+			GameObject *go = m_goList.back();
+			delete go;
+			m_goList.pop_back();
+		}
+		while (bullet_list.size() > 0)
+		{
+			GameObject *go = bullet_list.back();
+			delete go;
+			bullet_list.pop_back();
+		}
+		Init();//*/
+		break;
 	}
 
 }
@@ -242,15 +296,14 @@ void AI::GlutIdle()
 
 			GameObject *nearest = NULL;
 
-			//Check bullet collision
-			
-
 			switch (go->type)
 			{
 			case GameObject::GO_BULLET:
 				break;
 
 			case GameObject::GO_CHIEF:
+				if (robberCount <= 0)
+					police_mb.sendMessage("After them!", go->type, GameObject::GAMEOBJECT_TYPE::GO_POLICE, 0);
 				switch (go->CurrentState)
 				{
 				case GameObject::STATES::SHOOTING:
@@ -283,7 +336,9 @@ void AI::GlutIdle()
 				if (!police_mb.getMessage(go->type).compare("Shoot")) {
 					go->CurrentState = GameObject::STATES::SHOOTING;
 				}
-
+				else if (!police_mb.getMessage(go->type).compare("After them!")) {
+					go->CurrentState = GameObject::STATES::CHASING;
+				}
 
 				switch (go->CurrentState)
 				{
@@ -297,26 +352,11 @@ void AI::GlutIdle()
 					}
 					break;
 				case GameObject::STATES::CHASING:
-					/*
-					if (go->TargetLocked)
-					{
-						//if (!(robbers[go->Target]->pos == go->TargetPos))
-						if (!(robbers[go->Target]->active))
-						{
-
-							go->TargetLocked = false;
-							std::cout << "Target change" << std::endl;
-						}
+					GotoLocation(exit->pos, go, 15);
+					if (ReachedLocation(exit->pos, go)) {
+						go->active = false;
+						robberCount--;
 					}
-
-					if (!go->TargetLocked)
-					{
-						go->Target = rand() % robbers.size();
-						go->TargetLocked = true;
-					}
-					GotoLocation(robbers[go->Target]->pos, go, 15);
-					go->TargetPos = robbers[go->Target]->pos/* + robbers[go->Target]->vel;
-					*/
 					break;
 				case GameObject::STATES::SHOOTING:
 					go->vel.SetZero();
@@ -328,24 +368,47 @@ void AI::GlutIdle()
 				}
 				break;
 
-			case GameObject::GO_ROBBER:
+			case GameObject::GO_ROBBER:		
+				if (go->money < 100 && !Alarm)
+					go->CurrentState = GameObject::STATES::STEALING;
+				else
+					go->CurrentState = GameObject::STATES::DEPOSITING;
+				
+				if (robberCount <= 0)
+					go->CurrentState = GameObject::RUNNING_AWAY;
 
-					if (go->money < 100)
-						go->CurrentState = GameObject::STATES::STEALING;
-					else
-						go->CurrentState = GameObject::STATES::DEPOSITING;
-
-					if (robber_mb.getMessage(GameObject::GO_ROBBER) == "Police!")
-					{
-						go->CurrentState = GameObject::SHOOTING;
+				if (robber_mb.getMessage(GameObject::GO_ROBBER) == "I'm outta here!" && (robberCount < 2))
+				{
+					if (go->CurrentState != GameObject::RUNNING_AWAY) {
+						//int random = rand() % robberCount;
+						//if (random == 0)
+						go->CurrentState = GameObject::RUNNING_AWAY;
 					}
-
+				}
+				else if (robber_mb.getMessage(GameObject::GO_ROBBER) == "Police!")
+				{
+					go->CurrentState = GameObject::SHOOTING;
+				}
+				
+				
 
 				switch (go->CurrentState) //Robber States
 				{
 				case GameObject::STATES::STEALING:
-					GotoLocation(money->pos, go, 15);
-					if (ReachedLocation(money->pos, go))
+
+					//Initialise money pile to go to
+					if (go->money == 0 && go->TargetLocked == false) {
+						int go_rand = rand() % 2;
+						if (go_rand == 0)
+							go->Target = money;
+						else 
+							go->Target = money2;
+						go->TargetLocked = true;
+					}
+					
+					GotoLocation(go->Target->pos, go, 15);
+
+					if (ReachedLocation(go->Target->pos, go))
 					{
 						go->vel.SetZero();
 						if (go->money < 100)
@@ -354,13 +417,21 @@ void AI::GlutIdle()
 					break;
 				case GameObject::STATES::DEPOSITING:
 					GotoLocation(exit->pos, go, 15);
-					if (ReachedLocation(exit->pos, go))
+					if (ReachedLocation(exit->pos, go)) {
 						go->money = 0;
+						go->TargetLocked = false;
+						if (Alarm) {
+							go->active = false;
+							robberCount--;
+						}
+					}
 					break;
 				case GameObject::STATES::RUNNING_AWAY:
 					GotoLocation(exit->pos, go, 15);
-					if (ReachedLocation(exit->pos, go))
+					if (ReachedLocation(exit->pos, go)) {
 						go->active = false;
+						robberCount--;
+					}
 					break;
 				case GameObject::STATES::SHOOTING:
 					go->vel.SetZero();
@@ -388,10 +459,16 @@ void AI::GlutIdle()
 				switch(go->CurrentState) 
 				{
 				case GameObject::STATES::PATROLLING:
-					if (go->pos.y < 20)
-						go->vel.Set(0, 15, 0);
-					else if (go->pos.y > 80)
-						go->vel.Set(0, -15, 0);
+					if (go->pos.x < 80) {
+						go->vel.Set(15, 0, 0);
+					}
+					else {
+						//go->vel.Set(0, -15, 0);
+						if (go->pos.y < 20)
+							go->vel.Set(0, 15, 0);
+						else if (go->pos.y > 80)
+							go->vel.Set(0, -15, 0);
+					}
 					for (std::vector<GameObject *>::iterator it = police_list.begin(); it != police_list.end(); ++it) {
 						GameObject * police = (GameObject*)* it;
 						if (police->active) {
@@ -399,15 +476,18 @@ void AI::GlutIdle()
 								robber_mb.sendMessage("Police!", go->type, GameObject::GO_ROBBER, 1);
 								police_mb.sendMessage("Shoot", GameObject::GO_CHIEF, GameObject::GO_POLICE, 1);
 								police_list[0]->CurrentState = GameObject::SHOOTING;
-								go->CurrentState = GameObject::STATES::RUNNING_AWAY;
+								go->CurrentState = GameObject::RUNNING_AWAY;
+								Alarm = true;
 							}
 						}
 					}
 					break;
 				case GameObject::STATES::RUNNING_AWAY:
 					GotoLocation(exit->pos, go, 15);
-					if (ReachedLocation(exit->pos, go))
+					if (ReachedLocation(exit->pos, go)) {
 						go->active = false;
+						robberCount--;
+					}
 					break;
 				}
 				break;
@@ -419,16 +499,27 @@ void AI::GlutIdle()
 			for (std::vector<GameObject *>::iterator it2 = bullet_list.begin(); it2 != bullet_list.end(); ++it2)
 			{
 				GameObject *other = (GameObject *)*it2;
-				if (other->active && other->type == GameObject::GO_BULLET)
+				if (go->active && other->active && other->type == GameObject::GO_BULLET)
 				{
-					if (ReachedLocation(go->pos, other))
+					if (ReachedLocation(go->pos, other) && go->active)
 					{
 						go->health -= 10;
+						if (go->type == GameObject::GO_ROBBER)
+						{
+							if (go->health <= 100 - robberCount * 20) {
+								int runAway = rand() % 2;
+								if (runAway == 0) {
+									robber_mb.sendMessage("I'm outta here!", go->type, GameObject::GO_ROBBER, 0);
+									go->CurrentState = GameObject::RUNNING_AWAY;
+								}
+							}
+						}
 						other->active = false;
-						///*
-						if (go->health <= 0) {
+						if (go->health <= 0 && go->active) {
 							go->active = false;
 							if (go->type == GameObject::GO_ROBBER) {
+								robberCount--;
+								cout << endl << robberCount;
 								//robber_list.erase[go->vecPos];
 								//m_goList.erase(go);
 								//robber_list.erase(go);
@@ -446,7 +537,6 @@ void AI::GlutIdle()
 								}
 							}
 						}
-						//*/
 					}
 				}
 			}

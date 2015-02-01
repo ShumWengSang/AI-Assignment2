@@ -37,8 +37,9 @@ void AI::GlutDisplay()
 
 	glPopMatrix();
 
-	police_mb.DebugMessage.RenderMessageBoard(3,78,60,20);
-	robber_mb.DebugMessage.RenderMessageBoard(67,78,60,20);
+	robber_mb.DebugMessage.RenderMessageBoard(3, 78, 60, 20);
+	police_mb.DebugMessage.RenderMessageBoard(67,78,60,20);
+	
 	glutSwapBuffers();
 	glutPostRedisplay();
 
@@ -215,11 +216,17 @@ void AI::DrawObject(GameObject *go)
 		break;
 	case GameObject::GO_EXIT:
 		glPushMatrix();
-		glColor3f(1, 1, 1);
-		glTranslatef(go->pos.x, go->pos.y, go->pos.z);
-		glScalef(go->scale.x, go->scale.y, go->scale.z);
-		glBindTexture(GL_TEXTURE_2D, textures[GameObject::GAMEOBJECT_TYPE::GO_EXIT].texID);
-		DrawSquare(4);
+			glColor3f(1, 1, 1);
+			glTranslatef(go->pos.x, go->pos.y, go->pos.z);
+			glScalef(go->scale.x, go->scale.y, go->scale.z);
+			glRotatef(90, 0, 0, 1);
+			glBindTexture(GL_TEXTURE_2D, textures[GameObject::GAMEOBJECT_TYPE::GO_EXIT].texID);
+			glBegin(GL_QUADS);
+				glTexCoord2f(0, 0);		glVertex2f(-9, -3);
+				glTexCoord2f(1, 0);		glVertex2f(9, -3);
+				glTexCoord2f(1, 1);		glVertex2f(9, 3);
+				glTexCoord2f(0, 1);		glVertex2f(-9, 3);
+			glEnd();
 		glPopMatrix();
 		break;
 	case GameObject::GO_MONEY:

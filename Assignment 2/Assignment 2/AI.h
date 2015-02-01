@@ -67,6 +67,7 @@ private:
 	GameObject* FetchGO();
 	void FireBullet(GameObject* go);
 	GameObject* money;
+	GameObject* money2;
 	GameObject* exit;
 	//Vector3 WayPoints[5];
 	WayPoint thePoints[5];
@@ -94,4 +95,7 @@ private:
 
 	MessageBoard police_mb;
 	MessageBoard robber_mb;
+
+	int robberCount;
+	int policeCount;
 };
