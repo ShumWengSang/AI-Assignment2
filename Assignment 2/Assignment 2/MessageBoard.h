@@ -105,7 +105,7 @@ public:
 
 	}
 
-	AI*aiHandler;
+	AI * aiHandler;
 };
 
 class MessageBoard {
